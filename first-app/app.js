@@ -13,6 +13,7 @@ function sayHello(name) {
 // clearInterval();
 
 var message = '';
+/** Will result in error since with node js, scoped to this file only **/
 console.log(windows.message);
 // global.message;
 
