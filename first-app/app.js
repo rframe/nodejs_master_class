@@ -1,8 +1,13 @@
-const os = require('os');
+const fs = require('fs');
 
-var totalMemory = os.totalmem();
+// const files = fs.readdirSync('./');
+// console.log(files);
 
-var freeMemory = os.freemem();
 
-console.log(`Total Memory: ${totalMemory}`);
-console.log(`Free Memory: ${freeMemory}`);
+fs.readdir('./', (err, asynFiles) => {
+    if (err) {
+        console.log('Error', err);
+    } else {
+        console.log(asynFiles);
+    }
+});
