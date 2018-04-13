@@ -1,16 +1,21 @@
-// const EventEmitter = require('events');
-const Logger = require('./logger');
-const logger = new Logger();
-
-
-
-// Register a listener
-logger.on(logger.messageLogged, (arg) => { // e, eventArg
-    console.log(`Listener Called id: ${arg.id} url: ${arg.url}`);
+const http = require('http');
+const server = http.createServer((req, res) => {
+    if (req.url === '/') {
+        res.write('Hello World');
+        res.end();
+    }
+    if (req.url === '/api/courses') {
+        res.write(JSON.stringify([1, 2, 3, 4, 5]));
+        res.end();
+    }
 });
 
-logger.log('message')
+// server.on('connection', (socket) => {
+//     console.log('new connection')
+// });
+
+server.listen(3000);
+
+console.log('Listening on port 3000...');
 
 
-// Raise: logging (data: message)
- logger.emit(logger.logEvent, {message: 'Test Logger'});
