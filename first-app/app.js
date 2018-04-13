@@ -1,6 +1,5 @@
-const log = require('./logger');
+const path = require('path');
 
-/** Following line of code word error **/
-// logger = 1;
+const pathObject = path.parse(__filename);
 
-log('message');
+console.log(pathObject);
