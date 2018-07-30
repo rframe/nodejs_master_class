@@ -8,6 +8,16 @@ app.get('/', (req, res) => {
 app.get('/api/courses', (req, res) => {
     res.send([1, 2, 3]);
 });
+// /api/courses/1
+app.get('/api/courses/:id', (req, res) => {
+    res.send(req.params.id);
+});
+
+// http://localhost:3001/api/posts/2018/1?sortBy=name
+app.get('/api/posts/:year/:month', (req, res) => {
+    res.send(req.query);
+    // res.send(req.params);
+});
 
 // PORT
 const port = process.env.PORT || 3001;
