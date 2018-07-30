@@ -39,13 +39,13 @@ app.get('/api/courses/:id', (req, res) => {
     res.send(course);
 });
 
-app.post('api/courses', (res, req) => {
+app.post('/api/courses', (req, res) => {
     const id = courses.length + 1;
 
-    if(!!res.body.name) {
+    if(!!req.body.name) {
         const course = {
             id: id,
-            name: res.body.name
+            name: req.body.name
         };
         courses.push(course);
         res.send(course);
