@@ -43,15 +43,11 @@ app.get('/api/courses/:id', (req, res) => {
 app.post('/api/courses', (req, res) => {
     const id = courses.length + 1;
 
-    // define schema
-    const schema = {
-        name: Joi.string().min(3).required()
-    }
-    const result = Joi.validate(req.body, schema);
+    const {error} = validateCourse(req.body);
 
-    if(result.error) {
+    if(error) {
         res.status(400)
-                .send(result.error.details[0].message);
+                .send(error.details[0].message);
         return;
     }
 
@@ -63,6 +59,36 @@ app.post('/api/courses', (req, res) => {
     res.send(course);
 });
 
+app.put('/api/courses/:id', (req, res) => {
+    // Look up the course
+    // If Not existing return 404
+    const courseId = parseInt(req.params.id);
+    let course = null;
+    if(!!courseId) {
+        course = courses.find(c => c.id === courseId);
+    }
+    if(!course) {
+        // 404
+        res.status(404).send('The course with the given ID was not found')
+    }
+
+    // Validate
+    // const result = validateCourse(req.body);
+    // Object destructuring
+    const {error} = validateCourse(req.body);
+
+    if(error) {
+        res.status(400)
+                .send(error.details[0].message);
+        return;
+    }
+
+    // Update course
+    // Return the updated course
+    course.name = req.body.name;
+    res.send(course);
+});
+
 // PORT
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
@@ -70,3 +96,11 @@ app.listen(port, () => {
 });
 // Installed nodemon 'npm i -g nodemon'
 // 'node index.js' becomes 'nodemon index.js' files will be watched and server restarted
+
+
+function validateCourse(course) {
+    const schema = {
+        name: Joi.string().min(3).required()
+    };
+    return Joi.validate(course, schema);
+}
