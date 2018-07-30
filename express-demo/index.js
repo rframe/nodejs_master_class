@@ -29,27 +29,23 @@ app.get('/api/courses', (req, res) => {
 // /api/courses/1
 app.get('/api/courses/:id', (req, res) => {
     const courseId = parseInt(req.params.id);
-    let course = null;
-    if(!!courseId) {
-        course = courses.find(c => c.id === courseId);
-    }
-    if(!course) {
-        // 404
-        res.status(404).send('The course with the given ID was not found')
-    }
+    const course = !!courseId && courses.find(c => c.id === courseId);
+
+    // 404
+    if(!course) return res.status(404).send('The course with the given ID was not found');
+
     res.send(course);
 });
 
 app.post('/api/courses', (req, res) => {
-    const id = courses.length + 1;
+    const id = newCourseId();
 
     const {error} = validateCourse(req.body);
 
-    if(error) {
-        res.status(400)
+    if(error) return res.status(400)
                 .send(error.details[0].message);
-        return;
-    }
+
+
 
     const course = {
         id: id,
@@ -63,29 +59,42 @@ app.put('/api/courses/:id', (req, res) => {
     // Look up the course
     // If Not existing return 404
     const courseId = parseInt(req.params.id);
-    let course = null;
-    if(!!courseId) {
-        course = courses.find(c => c.id === courseId);
-    }
-    if(!course) {
-        // 404
-        res.status(404).send('The course with the given ID was not found')
-    }
+    const course = !!courseId && courses.find(c => c.id === courseId);
+
+    // 404
+    if(!course) return res.status(404).send('The course with the given ID was not found');
 
     // Validate
-    // const result = validateCourse(req.body);
     // Object destructuring
     const {error} = validateCourse(req.body);
 
-    if(error) {
-        res.status(400)
+    if(error) return res.status(400)
                 .send(error.details[0].message);
-        return;
-    }
+
+
 
     // Update course
     // Return the updated course
     course.name = req.body.name;
+    res.send(course);
+});
+
+app.delete('/api/courses/:id', (req, res) => {
+    // Look up course
+    // Not existing, return 404
+    const courseId = parseInt(req.params.id);
+
+    const course = !!courseId && courses.find(c => c.id === courseId);
+
+    // 404
+    if(!course) return res.status(404)
+                    .send('The course with the given ID was not found');
+
+    //Delete
+    const index = courses.indexOf(course);
+    courses.splice(index, 1);
+
+    // Return the same course that was deleted
     res.send(course);
 });
 
@@ -97,6 +106,13 @@ app.listen(port, () => {
 // Installed nodemon 'npm i -g nodemon'
 // 'node index.js' becomes 'nodemon index.js' files will be watched and server restarted
 
+function newCourseId() {
+    const courseIds = courses.map(x => x.id);
+    if(courseIds.length < 1) {
+        courseIds.push(0);
+    }
+
+    return Math.max(...courseIds) + 1;}
 
 function validateCourse(course) {
     const schema = {
