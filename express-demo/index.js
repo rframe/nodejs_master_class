@@ -9,8 +9,10 @@ app.get('/api/courses', (req, res) => {
     res.send([1, 2, 3]);
 });
 
-app.listen(3001, () => {
-    console.log(`Listening on port 3001`);
+// PORT
+const port = process.env.PORT || 3001;
+app.listen(port, () => {
+    console.log(`Listening on port ${port}`);
 });
 // Installed nodemon 'npm i -g nodemon'
 // 'node index.js' becomes 'nodemon index.js' files will be watched and server restarted
