@@ -1,3 +1,4 @@
+const Joi = require('joi');
 const express = require('express');
 const app = express();
 
@@ -42,16 +43,24 @@ app.get('/api/courses/:id', (req, res) => {
 app.post('/api/courses', (req, res) => {
     const id = courses.length + 1;
 
-    if(!!req.body.name) {
-        const course = {
-            id: id,
-            name: req.body.name
-        };
-        courses.push(course);
-        res.send(course);
-    } else {
-        res.status(400).send('Course name is required')
+    // define schema
+    const schema = {
+        name: Joi.string().min(3).required()
     }
+    const result = Joi.validate(req.body, schema);
+
+    if(result.error) {
+        res.status(400)
+                .send(result.error.details[0].message);
+        return;
+    }
+
+    const course = {
+        id: id,
+        name: req.body.name
+    };
+    courses.push(course);
+    res.send(course);
 });
 
 // PORT
