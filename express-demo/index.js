@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 
+app.use(express.json());
+
 const courses = [
     {
         id: 1,
@@ -35,6 +37,21 @@ app.get('/api/courses/:id', (req, res) => {
         res.status(404).send('The course with the given ID was not found')
     }
     res.send(course);
+});
+
+app.post('api/courses', (res, req) => {
+    const id = courses.length + 1;
+
+    if(!!res.body.name) {
+        const course = {
+            id: id,
+            name: res.body.name
+        };
+        courses.push(course);
+        res.send(course);
+    } else {
+        res.status(400).send('Course name is required')
+    }
 });
 
 // PORT
