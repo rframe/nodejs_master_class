@@ -1,22 +1,17 @@
 'use strict';
-
+const express = require('express');
+const router = express.Router();
 const Joi = require('joi');
 
 class Genres {
 
-    constructor(app) {
+    constructor() {
         this.location = 'genres';
         this.genres = [
             {id: 1, name: 'horror'},
             {id: 2, name: 'sci-fi'},
             {id: 3, name: 'action'}
         ];
-
-        app.get(`/api/${this.location}`, this.get.bind(this));
-        app.get(`/api/${this.location}/:id`, this.getGenre.bind(this));
-        app.post(`/api/${this.location}`, this.post.bind(this));
-        app.put(`/api/${this.location}/:id`, this.put.bind(this));
-        app.delete(`/api/${this.location}/:id`, this.delete.bind(this));
     }
 
     get(req, res) {
@@ -105,4 +100,11 @@ class Genres {
     }
 }
 
-module.exports = Genres;
+const genres = new Genres();
+router.get(`/`, genres.get.bind(genres));
+router.get(`/:id`, genres.getGenre.bind(genres));
+router.post(`/`, genres.post.bind(genres));
+router.put(`/:id`, genres.put.bind(genres));
+router.delete(`/:id`, genres.delete.bind(genres));
+
+module.exports = router;

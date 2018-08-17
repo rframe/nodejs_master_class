@@ -1,11 +1,11 @@
 const Joi = require('joi');
 const express = require('express');
-const Genres = require('./genres');
+const genres = require('./routes/genres');
 const app = express();
 
 app.use(express.json());
 
-const genres = new Genres(app);
+app.use('/api/genres', genres);
 
 
 
