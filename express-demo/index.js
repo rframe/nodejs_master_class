@@ -5,6 +5,7 @@ const logger = require('./logger');
 const authenticator = require('./authenticator');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const config = require('config');
 
 const nodeEnv = process.env.NODE_ENV;// undefined if not set
 // console.log(`NODE_ENV: ${nodeEnv}`);
@@ -17,6 +18,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // key=value&key=value, req.body
 app.use(express.static('public'));
 app.use(helmet());
+
+// Configuration
+
+console.log(`Applciation Name: ${config.get('name')}`);
+console.log(`Mail Server: ${config.get('mail.host')}`);
+console.log(`Mail Password: ${config.get('mail.password')}`);
+console.log(`sub_name: ${config.get('sub_name')}`);
 
 if(env === 'development') {
     app.use(morgan('tiny'));
