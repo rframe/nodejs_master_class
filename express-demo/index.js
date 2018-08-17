@@ -1,3 +1,11 @@
+const startupDebugger = require('debug')('app:startup');
+// as time of running DEBUG=app:startup,app:db nodemon index.js
+//export DEBUG=app:*
+//export DEBUG=app:startup,app:db
+//export DEBUG=app:startup
+//export DEBUG=
+
+const dbDebugger = require('debug')('app:db');
 const Joi = require('joi');
 const express = require('express');
 const app = express();
@@ -28,8 +36,11 @@ console.log(`sub_name: ${config.get('sub_name')}`);
 
 if(env === 'development') {
     app.use(morgan('tiny'));
-    console.log('Morgan enabled....')
+    startupDebugger('Morgan enabled....');
 }
+
+// Database work
+dbDebugger('Connected to the database...');
 
 app.use(logger);
 
