@@ -7,6 +7,10 @@ const authenticator = require('./authenticator');
 
 app.use(express.json());
 
+app.use(express.urlencoded({ extended: true })); // key=value&key=value, req.body
+
+app.use(express.static('public'));
+
 app.use(logger);
 
 app.use(authenticator);
