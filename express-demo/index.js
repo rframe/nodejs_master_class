@@ -6,11 +6,22 @@ const authenticator = require('./authenticator');
 const helmet = require('helmet');
 const morgan = require('morgan');
 
+const nodeEnv = process.env.NODE_ENV;// undefined if not set
+// console.log(`NODE_ENV: ${nodeEnv}`);
+
+const env = app.get('env');
+// console.log(`app env: ${env}`);
+// export NODE_ENV=production - set environment variable on mac
+// set NODE_ENV=production - set environment variable on windows
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // key=value&key=value, req.body
 app.use(express.static('public'));
 app.use(helmet());
-app.use(morgan('tiny'));
+
+if(env === 'development') {
+    app.use(morgan('tiny'));
+    console.log('Morgan enabled....')
+}
 
 app.use(logger);
 
