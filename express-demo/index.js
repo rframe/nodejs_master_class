@@ -15,6 +15,11 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const config = require('config');
 
+app.set('view engine', 'pug');
+// optional
+// app.set('views', './views')  // './views is default value
+
+
 const nodeEnv = process.env.NODE_ENV;// undefined if not set
 // console.log(`NODE_ENV: ${nodeEnv}`);
 
@@ -62,7 +67,7 @@ const courses = [
 ];
 
 app.get('/', (req, res) => {
-    res.send('Hello World!!!');
+    res.render('index', {title: 'My Express App', message: 'Hello'})
 });
 
 app.get('/api/courses', (req, res) => {
